@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Felgo 3.0
 import "../"
 import "../entities"
-//import "../controls"
+import "../scenes"
 
 Item {
   id: levelBaseScene
@@ -225,7 +225,7 @@ Item {
       color: "white"
       anchors.centerIn: parent
       width: 200
-      height: 80
+      height: 200
       radius: 10
       border.width: 5
       border.color: "lightgrey"
@@ -240,6 +240,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 18
+        anchors.bottomMargin: 7
         font.pixelSize: 14
 
       }
@@ -250,17 +251,27 @@ Item {
         text: "Unbelievable!"
         font.pixelSize: 12
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 14+7
+        anchors.top: textWinner2.bottom
+        anchors.bottomMargin: 7
         horizontalAlignment:  Text.AlignHCenter
       }
+
       Text {
         id: textStatistic3
-        text: ""
+        text:"Score\n"
+        +"NormalEnemy: "+gameScene.deadNormalEnemy+"*200"+"\n"
+        +"SpeedEnemy: "+gameScene.deadSpeedEnemy+"*300"+"\n"
+        +"StrongEnemy: "+gameScene.deadStrongEnemy+"*400"+"\n"
+        +"You life: "+gameScene.activeLevel.player1.life+"*500"+"\n"
+        +"------------------\n"
+        +"Total: "+gameScene.score
+
         font.pixelSize: 12
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 14+7
+        anchors.top: textStatistic2.bottom
+        anchors.topMargin: 7
+        //anchors.bottom: parent.bottom
+        //anchors.bottomMargin: 7
         horizontalAlignment:  Text.AlignHCenter
       }
 

@@ -301,11 +301,14 @@ Timer{
 
           if(variationType==="speed"){
               gameScene.score+=300;
+              gameScene.deadSpeedEnemy++;
           }else if(variationType==="strong"){
               gameScene.score+=400;
+              gameScene.deadStrongEnemy++;
           }
           else{
               gameScene.score+=200;
+              gameScene.deadStrongEnemy++;
           }
 
       }

@@ -19,6 +19,11 @@ SceneBase {
     property int numMapEnemy:0//当前地图敌人数
     property int maxMapEnemy:4//地图最大敌人数
 
+    //死亡敌人数统计
+    property int deadNormalEnemy:0
+    property int deadSpeedEnemy:0
+    property int deadStrongEnemy:0
+
 
     property double canAppear:1//Boss出现后禁止小怪生成
     property int ourMoveV: 5440//我方move速度
@@ -113,7 +118,10 @@ SceneBase {
           score=0//玩家分数置0
           sumEnemy=10//本关总敌人数
           numMapEnemy=0//当前地图敌人数 置0
-
+          //死亡敌人数统计 置0
+          deadNormalEnemy=0
+          deadSpeedEnemy=0
+          deadStrongEnemy=0
 
           timer1.interval=500;//敌人出现频率重置
           timer1.running=true;
