@@ -17,25 +17,15 @@ GameWindow {
 
   property int gameOver :0
   property int numPlayerDead :0
-  property int player1Dead :0
   property int youWin :0
 
   MenuScene {
     id: menuScene
     // listen to the button signals of the scene and change the state according to it
-    onStartGamePressed: gameWindow.state = "selectPlayer"
+    onStartGamePressed: gameWindow.state = "selectLevel"
     onSettingsPressed: gameWindow.state = "settings"
   }
-  SelectPlayerScene {
-    id: selectPlayerScene
 
-    onPlayerPressed: {
-       gameScene.setPlayer(numPlayers)
-       gameWindow.state = "selectLevel"
-
-    }
-    onBackPressed: gameWindow.state = "menu"
-  }
   SettingScene{
     id:settingScene
 
@@ -51,7 +41,7 @@ GameWindow {
        gameWindow.state = "game"
 
     }
-    onBackPressed: gameWindow.state = "selectPlayer"
+    onBackPressed: gameWindow.state = "menu"
   }
   // game scene to play a level
   GameScene {
@@ -67,11 +57,7 @@ GameWindow {
          PropertyChanges {target: menuScene; opacity: 1}
          PropertyChanges {target: gameWindow; activeScene: menuScene}
        },
-       State {
-         name: "selectPlayer"
-         PropertyChanges {target: selectPlayerScene; opacity: 1}
-         PropertyChanges {target: gameWindow; activeScene: selectPlayerScene}
-       },
+
        State {
          name: "settings"
          PropertyChanges {target: settingScene; opacity: 1}

@@ -26,6 +26,7 @@ EntityBase {
   property int rotate: 3
   property int enemyMoveV: 3000//敌人move速度
   property int enemyBulletV: 100//敌人Bullet速度
+
   property string imageName: "p1"
 
 property int countId : 0//id数计算,消除Id重复警告
@@ -96,8 +97,6 @@ property int countId : 0//id数计算,消除Id重复警告
      return (Min+Math.round(rand*Range));
 
  }
-
-
  Timer{
     id:timer
     interval: 30
@@ -151,7 +150,7 @@ property int countId : 0//id数计算,消除Id重复警告
 
 Timer{
     id:timer4
-    interval: 1000//每一段时间发射子弹 //敌人Bullet间隔
+    interval: 1000
     repeat: true
     running: true
     onTriggered: {
@@ -190,7 +189,7 @@ Timer{
                                                               "entityId":"evilBullet"+countId
                                                             });
 
-        var num2=getRandomNum(0,1000);//敌人Bullet间隔
+        var num2=getRandomNum(500,1500);//敌人Bullet间隔
         interval=num2;//随机时间发射子弹
     }
 
@@ -220,7 +219,7 @@ Timer{
       life--;
       console.log("yaaaah")
       if(life===0){
-          if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
+//          if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
           var num1=getRandomNum(0,8);//随机道具
           //num1=4
           if(num1===3){
@@ -262,6 +261,8 @@ Timer{
           }
 
           enemy.destroy();
+          gameScene.numMapEnemy--;
+          gameScene.sumEnemy--;
           gameScene.score+=200;
 
       }

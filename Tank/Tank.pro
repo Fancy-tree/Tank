@@ -69,7 +69,6 @@ DISTFILES += \
     qml/scene/GameScene.qml \
     qml/common/SceneBase.qml \
     qml/common/MenuButton.qml \
-    qml/scenes/SelectPlayerScene.qml \
     qml/scenes/SettingScene.qml \
     qml/common/LevelBase.qml \
     qml/levels/Level2.qml \
@@ -125,8 +124,6 @@ DISTFILES += \
     images/p2_up.png \
     images/redWall.png \
     images/whiteWall.png \
-    qml/common/LevelBase2.qml \
-    qml/levels/Level1_2.qml \
     images/bullet.gif \
     images/home.png \
     images/homeBroke.png \
