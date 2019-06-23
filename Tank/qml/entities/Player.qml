@@ -12,7 +12,7 @@ EntityBase {
 
   property alias tank: tank
   property int rotate : 1
-  property int life: 3
+  property int life: 5
   property int gameOverp : 0
   property bool activateHitShield: false          // activate shield for short after a hit
   property int activeHitShieldCounter: 0          // count from 0 to 5 every 100 millisecond after being hit by a bullet

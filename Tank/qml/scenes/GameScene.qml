@@ -19,10 +19,11 @@ SceneBase {
     property int numMapEnemy:0//当前地图敌人数
     property int maxMapEnemy:4//地图最大敌人数
 
+
     property double canAppear:1//Boss出现后禁止小怪生成
     property int ourMoveV: 5440//我方move速度
     property int ourBulletV: 100//我方bullet速度
-    property int ourBulletI: 500//我方bullet间隔时间//手机端子弹发射速度失控
+    property int ourBulletI: 500//我方bullet间隔时间
     property int score: 0//我方总分
 
 
@@ -38,14 +39,19 @@ SceneBase {
       anchors.fill: parent.gameWindowAnchorItem
       color: "#47688e"
     }
+    //两侧显示屏
     Rectangle {
       anchors.left: parent.left
       y:parent.height/2-height/2-10-20
 
       color: "green"
+      border.width: 1
+      border.color: "white"
       height: width
       width: parent.width/5
+      radius:10
       Text {
+          color: "white"
           anchors.centerIn: parent
           font.pointSize:10
           text: "P1 HP:"+activeLevel.player1.life
@@ -56,10 +62,13 @@ SceneBase {
       y:parent.height/2-height/2-10-20
 
       color: "green"
+      border.width: 1
+      border.color: "white"
       height: width
       width: parent.width/5
-
+      radius:10
       Text {
+           color: "white"
           anchors.centerIn: parent
           font.pointSize:10
           text: "Score: "+score +"\n" +"Enemys: "+sumEnemy
@@ -79,6 +88,7 @@ SceneBase {
           backPressed()
           activeLevel = undefined
           activeLevelFileName = ""
+
         }
     }
     PhysicsWorld {
@@ -100,15 +110,17 @@ SceneBase {
           gameWindow.numPlayerDead=0;
           gameWindow.youWin=0;
           numRound=0//游戏回合置0
+          score=0//玩家分数置0
           sumEnemy=10//本关总敌人数
           numMapEnemy=0//当前地图敌人数 置0
+
 
           timer1.interval=500;//敌人出现频率重置
           timer1.running=true;
           timer.running=true;//随机数开始生成
           canAppear=1;//小怪可以出现
           countId=0;//id数计算,消除Id重复警告
-          var toRemoveEntityTypes = ["singleBullet","enemy"];//需要实体类型相同并赋予拥有唯一id
+          var toRemoveEntityTypes = ["singleBullet","enemy","propShield","propLifeAdd","propSpeedUp"];//需要实体类型相同并赋予拥有唯一id
           entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
 
@@ -143,6 +155,25 @@ SceneBase {
                   countId++;
                   if(canAppear===1){
                       if(numRound===0){
+                          var variationType01 ="normal"
+                          var variationType02 ="normal"
+                          var variationType03 ="normal"
+                          var num6=getRandomNum(1,5);//令第一波敌人也随机方案
+                          if(num6===1){
+                          }else if(num6===2){
+                              variationType02 ="strong"
+                          }else if(num6===3){
+                              variationType01 ="speed"
+                          }else if(num6===4){
+                              variationType01 ="speed"
+                              variationType03 ="strong"
+                          }else if(num6===5){
+                              variationType01 ="speed"
+                              variationType03 ="speed"
+                          }
+
+
+
                           var startX=105
                           var startY=20
                           var xDirection=0 //
@@ -151,7 +182,8 @@ SceneBase {
                           entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                             "start" : Qt.point(startX, startY),
                                                                             "velocity" : Qt.point(xDirection, yDirection),
-                                                                              "entityId":"enemy"+countId
+                                                                              "entityId":"enemy"+countId,
+                                                                              "variationType":variationType01,
                                                                             });
                           var startX2=230
                           var startY2=20
@@ -160,7 +192,8 @@ SceneBase {
                           entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                             "start" : Qt.point(startX2, startY2),
                                                                             "velocity" : Qt.point(xDirection2, yDirection2),
-                                                                              "entityId":"enemy"+countId
+                                                                              "entityId":"enemy"+countId,
+                                                                              "variationType":variationType02,
                                                                             });
                           var startX3=355
                           var startY3=20
@@ -169,7 +202,8 @@ SceneBase {
                           entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                             "start" : Qt.point(startX3, startY3),
                                                                             "velocity" : Qt.point(xDirection3, yDirection3),
-                                                                              "entityId":"enemy"+countId
+                                                                              "entityId":"enemy"+countId,
+                                                                              "variationType":variationType03,
                                                                             });
                           numMapEnemy+=3;
 
@@ -236,7 +270,7 @@ SceneBase {
                 gameWindow.gameOver=1;
                 running=false;
                 timer1.running=false;//判断玩家全都死亡游戏结束,停止产出敌人
-                var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
+                var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd","propSpeedUp"];
                 entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
             }
@@ -245,7 +279,8 @@ SceneBase {
                 gameWindow.gameOver=1;
                 running=false;
                 timer1.running=false;//判断玩家全都死亡游戏结束,停止产出敌人
-                var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
+                score+=activeLevel.player1.life*500;//
+                var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd","propSpeedUp"];
                 entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
             }
         }
@@ -261,7 +296,7 @@ SceneBase {
 
 
 
-//手机端 move shot 按键
+//手机端 shot move按键
      Rectangle {
        // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
        //visible: !system.desktopPlatform
@@ -271,13 +306,28 @@ SceneBase {
        anchors.bottomMargin: 10+10
        height: width+10
        width: parent.width/5
-       color: "green"
-       opacity: 0.6
+       //color: "green"
+       color: "#47688e"
+       //color: "white"
+       //opacity: 0.6
+       Rectangle {
+           id:imageframe2
+           anchors.centerIn: parent
+           height: width
+           width: parent.width
+           radius: 100
+           color: "white"
+       }
+       Image {
+           anchors.fill: imageframe2
+           source: "../../images/FireControl.png"
+       }
        Rectangle {
            color: "black"
            anchors.centerIn: parent
            height: 70
            width: 70
+           opacity: 0
 
            MultiPointTouchArea {
              anchors.fill: parent
@@ -348,12 +398,30 @@ SceneBase {
          anchors.bottom: parent.bottom
          anchors.bottomMargin: 10+10
 
-         color: "green"
-         opacity: 0.6
+         //color: "green"
+         color: "#47688e"
+         //color: "white"
+         //radius: 100
+         //opacity: 0.6
+
+
+         Rectangle {
+             id:imageframe
+             anchors.centerIn: parent
+             height: width
+             width: parent.width
+             radius: 100
+             color: "white"
+         }
+         Image {
+             anchors.fill: imageframe
+             source: "../../images/MoveControl.png"
+         }
          Rectangle {
              height: 35
              width: 55
              color: "black"
+             opacity: 0
 
              anchors.top: parent.top
              anchors.horizontalCenter:parent.horizontalCenter
@@ -377,6 +445,7 @@ SceneBase {
              height: 45
              width: 35
              color: "black"
+             opacity: 0
              anchors.right: parent.right
              anchors.verticalCenter: parent.verticalCenter
              MultiPointTouchArea {
@@ -401,6 +470,7 @@ SceneBase {
              height: 35
              width: 55
              color: "black"
+             opacity: 0
              anchors.bottom: parent.bottom
              anchors.horizontalCenter:parent.horizontalCenter
              MultiPointTouchArea {
@@ -425,6 +495,7 @@ SceneBase {
              height: 45
              width: 35
              color: "black"
+             opacity: 0
              anchors.left: parent.left
              anchors.verticalCenter: parent.verticalCenter
              MultiPointTouchArea {

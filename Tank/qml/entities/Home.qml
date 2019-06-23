@@ -36,7 +36,7 @@ EntityBase {
             homeBody.source="../../images/homeBroke.png";
             gameOverh=1;
             gameWindow.gameOver=1;//家毁游戏结束
-            var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
+            var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd","propSpeedUp"];
             entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
             //entityManager.removeAllEntities();

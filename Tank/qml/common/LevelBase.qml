@@ -17,6 +17,8 @@ Item {
   property alias home: home
 
 
+
+
   Wall{
       height:5
       width:rectangle.width+10
@@ -252,6 +254,17 @@ Item {
         anchors.bottomMargin: 14+7
         horizontalAlignment:  Text.AlignHCenter
       }
+      Text {
+        id: textStatistic3
+        text: ""
+        font.pixelSize: 12
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 14+7
+        horizontalAlignment:  Text.AlignHCenter
+      }
+
+
     }
 
 

@@ -43,6 +43,7 @@ property int countId : 0//id数计算,消除Id重复警告
   Image {
     id: tankBody
     anchors.fill:parent
+    asynchronous:true//异步//敌人变色不会卡
     source: "../../images/"+imageName+"_down.png"
 
   }
@@ -111,6 +112,7 @@ property int countId : 0//id数计算,消除Id重复警告
     running: true
     onTriggered: {
         rand=Math.random()
+
     }
 
  }
@@ -197,8 +199,8 @@ Timer{
                                                             });
 
         var num2;//敌人Bullet间隔
-        if(variationType === "speed") num2=getRandomNum(400,800);
-        else num2=getRandomNum(500,1000);
+        if(variationType === "speed") num2=getRandomNum(400,1000);
+        else num2=getRandomNum(500,1500);
 
         interval=num2;//随机时间发射子弹
     }
@@ -239,10 +241,19 @@ Timer{
 
 
       if(life===0){
-//        if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
-          var num1=getRandomNum(0,8);//随机道具
-          var numx=getRandomNum(105,355);//道具随机地点
-          var numy=getRandomNum(20,250);//道具随机地点
+
+          var num1//随机道具  概率随打败怪物强弱改变
+          if(variationType==="speed"){
+              num1=getRandomNum(0,6);
+          }
+          else if(variationType==="strong"){
+              num1=getRandomNum(0,5);
+          }
+          else {
+              num1=getRandomNum(0,8);
+          }
+          var numx=getRandomNum(115,370);//道具随机地点
+          var numy=getRandomNum(80,260);//道具随机地点
 
           //num1=4
           if(num1===3){
@@ -286,6 +297,8 @@ Timer{
           enemy.destroy();
           gameScene.numMapEnemy--;
           gameScene.sumEnemy--;
+
+
           if(variationType==="speed"){
               gameScene.score+=300;
           }else if(variationType==="strong"){

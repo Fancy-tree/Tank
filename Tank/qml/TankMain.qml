@@ -23,7 +23,13 @@ GameWindow {
     id: menuScene
     // listen to the button signals of the scene and change the state according to it
     onStartGamePressed: gameWindow.state = "selectLevel"
+    onCreditsPressed: gameWindow.state = "credits"
     onSettingsPressed: gameWindow.state = "settings"
+  }
+  Credits{
+      id:creditsScene
+
+      onBackPressed: gameWindow.state = "menu"
   }
 
   SettingScene{
@@ -57,7 +63,11 @@ GameWindow {
          PropertyChanges {target: menuScene; opacity: 1}
          PropertyChanges {target: gameWindow; activeScene: menuScene}
        },
-
+       State {
+         name: "credits"
+         PropertyChanges {target: creditsScene; opacity: 1}
+         PropertyChanges {target: gameWindow; activeScene: creditsScene}
+       },
        State {
          name: "settings"
          PropertyChanges {target: settingScene; opacity: 1}
