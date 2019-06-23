@@ -42,10 +42,11 @@ EntityBase {
       var otherEntityParent = collidedEntity.parent;
 
 
-
-      if(otherEntityId.substring(0, 1) !== "p"){//不打自己人
+      if (otherEntityId.substring(0, 3) !== "ene"){//敌人不会伤害自己人
           singleBullet.destroy();
-          collidedEntity.beShoted()
+          if(otherEntityId.substring(0, 1) === "p")otherEntityParent.beShoted();
+          else{collidedEntity.beShoted();}
+
       }
 
 
@@ -67,12 +68,13 @@ EntityBase {
     property: "y"
     velocity: singleBullet.velocity.y
     running: true
-//    onStopped: {
-//      singleBullet.destroy()
-//    }
+    onStopped: {
+      singleBullet.destroy()
+    }
   }
 
   function beShoted(){
      singleBullet.destroy();
   }
 }
+

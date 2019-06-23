@@ -139,4 +139,6 @@ DISTFILES += \
     images/p2_right.png \
     images/p2_up.png \
     images/redWall.png \
-    images/whiteWall.png
+    images/whiteWall.png \
+    qml/entities/EvilBullet.qml \
+    qml/entities/Enemy.qml

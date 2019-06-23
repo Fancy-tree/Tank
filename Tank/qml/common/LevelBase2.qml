@@ -6,6 +6,7 @@ import "../entities"
 
 Item {
   id: levelBaseScene
+  property alias rectangle:rectangle //一切实体大小的依据
   // this will be displayed in the GameScene
   property string levelName
   // this is emitted whenever the rectangle has been tapped successfully, the GameScene will listen to this signal and increase the score
@@ -14,10 +15,55 @@ Item {
 
   property alias player1: player1
     property alias player2: player2
+   property alias home: home
 
-  //background
+  Wall{
+      height:5
+      width:rectangle.width+10
+      anchors {
+          bottom:rectangle.top
+          left:rectangle.left
+          leftMargin:-5
+      }
+  }
+  Wall{
+
+      height:5
+     width:rectangle.width+10
+  anchors {
+      top:rectangle.bottom
+      left:rectangle.left
+      leftMargin:-5
+  }
+  }
+  Wall1{
+      height:rectangle.height
+      width:5
+      anchors{
+          right:rectangle.left
+          top:rectangle.top
+      }
+  }
+  Wall1{
+      height:rectangle.height
+      width:5
+      anchors{
+          left:rectangle.right
+          top:rectangle.top
+      }
+  }
+
+
   Rectangle {
-    anchors.fill: parent
+      id:rectangle
+      anchors.centerIn: parent
+      height: 300
+      width:(height/14)*13
+
+//    anchors.top: parent.top
+//    anchors.bottom: parent.bottom
+//    anchors.horizontalCenter: parent.horizontalCenter
+
     color: "black"
     visible: true
   }
@@ -27,29 +73,91 @@ Item {
       id: home
       entityId: "home"
       entityType: "home"
-      anchors.bottom: levelBaseScene.bottom
-      anchors.horizontalCenter: levelBaseScene.horizontalCenter
+      anchors.bottom: rectangle.bottom
+      anchors.horizontalCenter: rectangle.horizontalCenter
   }
 
 
 
   RedWall{
-    id:redWall3
-    anchors.bottom: levelBaseScene.bottom
-    anchors.left: home.right
+      id:wall1
+      z:2
+      height:rectangle.height/14/2
+      width:rectangle.height/14/2
+    anchors.right: home.left
+    anchors.bottom: rectangle.bottom
+
+ }
+  RedWall{
+      id:wall2
+      z:2
+      height:rectangle.height/14/2
+      width:rectangle.height/14/2
+      anchors.right: home.left
+      anchors.bottom: wall1.top
+
   }
   RedWall{
-    anchors.bottom: redWall3.top
-    anchors.left: home.right
+      id:wall3
+      z:2
+      height:rectangle.height/14/2
+      width:rectangle.height/14/2
+      anchors.right: home.left
+      anchors.bottom: wall2.top
   }
   RedWall{
-    anchors.bottom: home.top
-    anchors.left: home.right
+      id:wall4
+      z:2
+      height:rectangle.height/14/2
+      width:rectangle.height/14/2
+      anchors.top:wall3.top
+      anchors.left: wall3.right
+
+
   }
-  RedWall{
-    anchors.bottom: home.top
-    anchors.right: home.right
-  }
+
+
+
+
+   RedWall{
+       id:wall5
+       z:2
+       height:rectangle.height/14/2
+       width:rectangle.height/14/2
+       anchors.top: wall4.top
+       anchors.left: wall4.right
+
+   }
+   RedWall{
+       id:wall6
+       z:2
+       height:rectangle.height/14/2
+       width:rectangle.height/14/2
+       anchors.top: wall5.top
+       anchors.left: wall5.right
+
+   }
+
+
+
+   RedWall{
+       id:wall7
+       z:2
+       height:rectangle.height/14/2
+       width:rectangle.height/14/2
+       anchors.right: wall6.right
+       anchors.top: wall6.bottom
+   }
+   RedWall{
+       id:wall8
+       z:2
+       height:rectangle.height/14/2
+       width:rectangle.height/14/2
+       anchors.right: wall7.right
+       anchors.top: wall7.bottom
+
+   }
+
 
 
     // PLAYER 1
@@ -61,8 +169,8 @@ Item {
       variationType: "p1"
       tank.entityId: "p1"
       tank.variationType: "p1"
-      tank.originX: levelBaseScene.width/2-45-15-10
-      tank.originY: levelBaseScene.height-tank.height
+      tank.originX: levelBaseScene.width/2-45-5
+      tank.originY: levelBaseScene.height-tank.height-10
 
       //tank.rotation: 0
     }
@@ -76,8 +184,8 @@ Item {
       variationType: "p2"
       tank.entityId: "p2"
       tank.variationType: "p2"
-      tank.originX: levelBaseScene.width/2+15+10+20
-      tank.originY: levelBaseScene.height-tank.height
+      tank.originX: levelBaseScene.width/2+15+10+10
+      tank.originY: levelBaseScene.height-tank.height-10
 
       //tank.rotation: 0
     }
@@ -95,7 +203,10 @@ Item {
       radius: 10
       border.width: 5
       border.color: "lightgrey"
-      opacity:  (home.gameOverh || player1.tank.gameOverp || player2.tank.gameOverp ) ? 100 : 0
+      opacity:  (home.gameOverh || (gameWindow.numPlayerDead===2)) ? 100 : 0//判断游戏结束
+
+
+
 
       // game over message in the color of the winner
       Text {
@@ -120,11 +231,23 @@ Item {
         horizontalAlignment:  Text.AlignHCenter
       }
     }
-    //补救
-//     Rectangle {
-//         z: 19
-//         anchors.fill: parent
-//         color: "black"
-//         opacity:  (home.gameOverh || player1.gameOverp) ? 100 : 0
-//     }
+
+//    Enemy {
+//      z: 2
+//      id: enemy1
+//      entityId: "enemy1"
+//      variationType: "enemy1"
+//      tank.entityId: "enemy1"
+//      tank.variationType: "enemy1"
+//      tank.originX: 200
+//      tank.originY: 200
+//      rotation: 0
+
+//      life: 1
+
+//      //tank.rotation: 0
+//    }
+
+
 }
+

@@ -8,8 +8,9 @@ EntityBase {
     id: home
     entityId: "home"
     entityType: "home"
-    width: 30
-    height: 30
+
+    width: rectangle.height/14
+    height:width
 
 
     property alias redWsallBody: homeBody
@@ -34,8 +35,8 @@ EntityBase {
         if(life===0){
             homeBody.source="../../images/homeBroke.png";
             gameOverh=1;
-            //console.log("lllllllllllll"+gameOver)
-            var toRemoveEntityTypes = ["singleBullet","p1","p2"];
+            gameWindow.gameOver=1;//家毁游戏结束
+            var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy"];
             entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
             //entityManager.removeAllEntities();
         }
