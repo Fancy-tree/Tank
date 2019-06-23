@@ -22,7 +22,9 @@ SceneBase {
     property double canAppear:1//Boss出现后禁止小怪生成
     property int ourMoveV: 5440//我方move速度
     property int ourBulletV: 100//我方bullet速度
-    property int ourBulletI: 400//我方bullet间隔时间
+    property int ourBulletI: 500//我方bullet间隔时间
+    property int score: 0//我方总分
+
 
 
        // set the name of the current level, this will cause the Loader to load the corresponding level
@@ -42,18 +44,20 @@ SceneBase {
     }
     Rectangle {
       anchors.left: parent.left
-      y:parent.height/2-height/2
+      y:parent.height/2-height/2-10-20
+
       color: "green"
       height: width
       width: parent.width/5
       Text {
           anchors.centerIn: parent
-          text: qsTr("P1 HP:"+activeLevel.player1.life)
+          text: "P1 HP:"+activeLevel.player1.life
       }
     }
     Rectangle {
       anchors.right: parent.right
-      y:parent.height/2-height/2
+      y:parent.height/2-height/2-10-20
+
       color: "green"
       height: width
       width: parent.width/5
@@ -61,7 +65,7 @@ SceneBase {
       Text {
           anchors.centerIn: parent
           //opacity: (activeNumPlayers===2) ? 100 : 0
-          text: (activeNumPlayers===2) ? qsTr("P2 HP:"+activeLevel.player2.life) : ""
+          text: (activeNumPlayers===2) ? "P2 HP:"+activeLevel.player2.life : "Score: "+score
       }
     }
 
@@ -100,7 +104,8 @@ SceneBase {
           gameWindow.player1Dead=0;
           gameWindow.youWin=0;
           numRound=0//游戏回合置0
-          timer1.interval=2000;//敌人出现频率重置
+          timer1.interval=500;//敌人出现频率重置
+          timer1.running=true;
           timer.running=true;//随机数开始生成
           canAppear=1;//小怪可以出现
           countId=0;//id数计算,消除Id重复警告
@@ -142,7 +147,7 @@ SceneBase {
      property int countId : 0//id数计算,消除Id重复警告
      Timer {
          id:timer1
-              interval: 2000; running:activeLevel && !gameWindow.gameOver; repeat: true //只有进入关卡或游戏不gameover,enemy坦克才会产出
+              interval: 500; running:activeLevel && !gameWindow.gameOver; repeat: true //只有进入关卡或游戏不gameover,enemy坦克才会产出
               onTriggered: {
                   countId++;
                   if(canAppear===1){
@@ -260,7 +265,190 @@ SceneBase {
      }
 
 
+
+//手机端 move shot 按键
+     Rectangle {
+       // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
+       //visible: !system.desktopPlatform
+       //enabled: visible
+       anchors.right: parent.right
+       anchors.bottom: parent.bottom
+       anchors.bottomMargin: 10+10
+       height: width+10
+       width: parent.width/5
+       color: "green"
+       opacity: 0.6
+       Rectangle {
+           color: "black"
+           anchors.centerIn: parent
+           height: 70
+           width: 70
+
+           MultiPointTouchArea {
+             anchors.fill: parent
+             onPressed: {
+                 var startX=0
+                 var startY=0
+                 var xDirection=0 //玩家子弹速度
+                 var yDirection=0 //玩家子弹速度
+                 if(activeLevel.player1.rotate===4){
+                     startX=activeLevel.player1.tank.x-5
+                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
+                     xDirection=-ourBulletV
+                     yDirection=0
+                 }
+                 if(activeLevel.player1.rotate===2){
+                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width+5
+                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
+                     xDirection=ourBulletV
+                     yDirection=0
+                 }
+                 if(activeLevel.player1.rotate===3){
+                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
+                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height+5
+                     xDirection=0
+                     yDirection=ourBulletV
+                 }
+                 if(activeLevel.player1. rotate===1){
+                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
+                     startY=activeLevel.player1.tank.y-5
+                     xDirection=0
+                     yDirection=-ourBulletV
+                 }
+
+                 entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Bullet.qml"), {
+                                                                   "start" : Qt.point(startX, startY),
+                                                                   "velocity" : Qt.point(xDirection, yDirection),
+                                                                   "entityId": "singleBullet"+countId
+                                                                   });
+                 isShot=1;
+                 canShot=0;
+             }
+             onUpdated: {
+
+             }
+             onReleased: {
+
+             }
+           }
+
+
+       }
+
+
+
+
+
+     }
+
+     Rectangle {
+         height: width+10
+         width: parent.width/5
+         anchors.left: parent.left
+         anchors.bottom: parent.bottom
+         anchors.bottomMargin: 10+10
+
+         color: "green"
+         opacity: 0.6
+         Rectangle {
+             height: 35
+             width: 55
+             color: "black"
+
+             anchors.top: parent.top
+             anchors.horizontalCenter:parent.horizontalCenter
+             MultiPointTouchArea {
+               anchors.fill: parent
+               onPressed: {
+                   controller.yAxis = 1
+                   activeLevel.player1.tank.tankBody.source="../../images/p1_up.png"
+                   activeLevel.player1.rotate = 1
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
+
+               }
+               onReleased: {
+                   controller.yAxis = 0
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,0)
+
+               }
+             }
+         }
+         Rectangle {
+             height: 45
+             width: 35
+             color: "black"
+             anchors.right: parent.right
+             anchors.verticalCenter: parent.verticalCenter
+             MultiPointTouchArea {
+               anchors.fill: parent
+               onPressed: {
+                   controller.xAxis = 1
+                   activeLevel.player1.tank.tankBody.source="../../images/p1_right.png"
+                   activeLevel.player1.rotate = 2
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*ourMoveV,0)
+
+               }
+               onReleased: {
+                   controller.xAxis = 0
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,0)
+
+               }
+
+             }
+
+         }
+         Rectangle {
+             height: 35
+             width: 55
+             color: "black"
+             anchors.bottom: parent.bottom
+             anchors.horizontalCenter:parent.horizontalCenter
+             MultiPointTouchArea {
+               anchors.fill: parent
+               onPressed: {
+                   controller.yAxis = -1
+                   activeLevel.player1.tank.tankBody.source="../../images/p1_down.png"
+                   activeLevel.player1.rotate = 3
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
+
+               }
+               onReleased: {
+                   controller.yAxis = 0
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,0)
+
+               }
+
+             }
+
+         }
+         Rectangle {
+             height: 45
+             width: 35
+             color: "black"
+             anchors.left: parent.left
+             anchors.verticalCenter: parent.verticalCenter
+             MultiPointTouchArea {
+               anchors.fill: parent
+               onPressed: {
+                   controller.xAxis = -1
+                   activeLevel.player1.tank.tankBody.source="../../images/p1_left.png"
+                   activeLevel.player1.rotate = 4
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*ourMoveV,0)
+
+               }
+               onReleased: {
+                   controller.xAxis = 0
+                   activeLevel.player1.tank.boxCollider.force=Qt.point(0,0)
+
+               }
+             }
+         }
+     }
+
+
+
      Keys.forwardTo: [controller,controller2]
+
      TwoAxisController {
        id: controller
        //shot

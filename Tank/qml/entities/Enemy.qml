@@ -262,13 +262,11 @@ Timer{
           }
 
           enemy.destroy();
+          gameScene.score+=200;
+
       }
 }
 
-//  function gameOver(){
-//      GameInfo.gameOver=1;
-//      var toRemoveEntityTypes = ["singleBullet"];
-//      entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
-//  }
+
 
 }
