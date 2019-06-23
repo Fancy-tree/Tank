@@ -6,14 +6,18 @@ import "../levels"
 //red wall can easily be distoried
 EntityBase {
   id: wallred
-  entityType: "Wallred"
-  entityId: "Wallred"
+
+  entityId: "redWall"
+  entityType: "redWall"
 
   width: 15
   height: 15
 
   property alias redWallBody: redWallBody
   property alias circleCollider: boxCollider
+
+  property int life : 1
+
 
   Image {
     id: redWallBody
@@ -25,6 +29,11 @@ EntityBase {
     id: boxCollider
     bodyType: Body.Static
 
+  }
+
+  function beShoted(){
+      life--;
+      if(life===0)wallred.destroy();
   }
 }
 

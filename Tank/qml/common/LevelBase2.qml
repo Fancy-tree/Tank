@@ -13,6 +13,7 @@ Item {
   //focus: true
 
   property alias player1: player1
+    property alias player2: player2
 
   //background
   Rectangle {
@@ -50,16 +51,15 @@ Item {
     anchors.right: home.right
   }
 
+
     // PLAYER 1
     // player and tank
     Player {
       z: 2
       id: player1
       entityId: "p1"
-      entityType: "player"
       variationType: "p1"
       tank.entityId: "p1"
-      tank.entityType: "tank"
       tank.variationType: "p1"
       tank.originX: levelBaseScene.width/2-45-15-10
       tank.originY: levelBaseScene.height-tank.height
@@ -67,6 +67,20 @@ Item {
       //tank.rotation: 0
     }
 
+    // PLAYER 2
+    // player and tank
+    Player {
+      z: 2
+      id: player2
+      entityId: "p2"
+      variationType: "p2"
+      tank.entityId: "p2"
+      tank.variationType: "p2"
+      tank.originX: levelBaseScene.width/2+15+10+20
+      tank.originY: levelBaseScene.height-tank.height
+
+      //tank.rotation: 0
+    }
 
 
 
@@ -81,7 +95,7 @@ Item {
       radius: 10
       border.width: 5
       border.color: "lightgrey"
-      opacity:  (home.gameOverh || player1.tank.gameOverp) ? 100 : 0
+      opacity:  (home.gameOverh || player1.tank.gameOverp || player2.tank.gameOverp ) ? 100 : 0
 
       // game over message in the color of the winner
       Text {

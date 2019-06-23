@@ -15,8 +15,6 @@ GameWindow {
     entityContainer: gameScene
   }
 
-
-
   MenuScene {
     id: menuScene
     // listen to the button signals of the scene and change the state according to it

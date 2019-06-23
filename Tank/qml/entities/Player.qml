@@ -1,16 +1,17 @@
 import QtQuick 2.0
 import Felgo 3.0
 import "../levels"
-import ".."
+import "../"
+
 
 EntityBase {
   id: player
   variationType: "p1"
-  entityId: "player"
+  //entityId: "player"
   entityType: "player"
 
-  property int life: 100
   property alias tank: tank
+  //property int life: 10
 
   // each player controls a tank
   Tank {
@@ -21,8 +22,14 @@ EntityBase {
     //this is Tank's variationType!!
   }
 
-  function rotation() {
+  function beShoted(){
 
   }
+
+//  function gameOver(){
+//      GameInfo.gameOver=1;
+//      var toRemoveEntityTypes = ["singleBullet"];
+//      entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
+//  }
 
 }

@@ -1,7 +1,6 @@
 import QtQuick 2.0
  import Felgo 3.0
  import "../common" as Common
-import ".."
 import "../levels"
 import "../entities"
 //import "../entities/powerUps"
@@ -24,13 +23,10 @@ import "../entities"
    }
 
    WhiteWall{
-    entityId: "redWall1"
+    entityId: "whiteWall1"
     id: whiteWall1
     anchors {
       top: redWall1.bottom
-      //left: redWall1.left
-      //topMargin: scene.height / 2 -5
-      //leftMargin: tree5.treeBody.width - 18
     }
     whiteWallBody.source: "../../images/whiteWall.png"
    }

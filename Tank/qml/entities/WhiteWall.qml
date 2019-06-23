@@ -5,8 +5,8 @@ import "../levels"
 //white wall can not be distoried
 EntityBase {
     id:wallWhite
-    entityId: "Wallwhite"
-    entityType: "Wallwhite"
+    entityId: "whiteWall"
+    entityType: "whiteWall"
     width: 15
     height: 15
 
@@ -22,6 +22,10 @@ EntityBase {
     BoxCollider {
       id: boxCollider
       bodyType: Body.Static
+    }
+
+    function beShoted(){
+
     }
 
 }

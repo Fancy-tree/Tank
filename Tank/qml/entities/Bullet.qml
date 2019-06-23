@@ -18,9 +18,10 @@ EntityBase {
   Image {
     width: 7
     height: 14
-    //source: bulletType ? "../../assets/img/Icicle.png" :  "../../assets/img/Snowball.png"
+    source:  "../../images/bullet.gif"
     anchors.centerIn: parent
   }
+
 
   BoxCollider {
     id: boxCollider
@@ -40,25 +41,10 @@ EntityBase {
       var otherEntityId = collidedEntity.entityId;
       var otherEntityParent = collidedEntity.parent;
 
-      // destroy the bullet if it collided with anything but a lake or powerup
-//      if (otherEntityId.substring(0, 3) !== "lak" && otherEntityId.substring(0, 3) !== "pow") {
-        singleBullet.destroy();
+      singleBullet.destroy();
 
-//        // show a splat image for a certain amount of time after removing the bullet
-//        entityManager.createEntityFromUrlWithProperties(
-//              Qt.resolvedUrl("Splat.qml"), {
-//                "z": 1,
-//                "x": singleBullet.x,
-//                "y": singleBullet.y,
-//                "rotation": singleBullet.rotation
-//              }
-//              );
+      collidedEntity.beShoted();
 
-        // check if it hit a player
-        if (otherEntityId.substring(0, 4) === "tank") {
-          // call damage method on playerred/playerblue
-          otherEntityParent.onDamageWithBulletType(bulletType);
-        }
       }
     }
 
@@ -80,5 +66,9 @@ EntityBase {
     onStopped: {
       singleBullet.destroy()
     }
+  }
+
+  function beShoted(){
+     singleBullet.destroy();
   }
 }

@@ -19,6 +19,8 @@ EntityBase {
     property double originX
     property double originY
     property int rotate : 0
+    property int life: 10
+    property int gameOverp : 0
 
     // the visual body of the tank
     Image {
@@ -39,8 +41,17 @@ EntityBase {
       linearDamping: 100
       bullet: true
 
-      force: Qt.point(controller.xAxis*170*32,-controller.yAxis*170*32)
+      //force: Qt.point(controller.xAxis*170*32,-controller.yAxis*170*32)
       //bodyType: Body.Dynamic
     }
 
+    function beShoted(){
+        life--;
+        if(life===0){
+            //tank.destroy();
+            gameOverp=1;
+            var toRemoveEntityTypes = ["singleBullet","p1","p2"];
+            entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
+        }
+}
 }

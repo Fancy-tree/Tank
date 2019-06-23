@@ -79,7 +79,6 @@ DISTFILES += \
     qml/entities/Tank.qml \
     qml/entities/Bullet.qml \
     qml/entities/Player.qml \
-    qml/GameInfo.qml \
     images/player1_up.gif \
     images/p2_up.gif \
     images/p1_up.gif \
@@ -113,6 +112,31 @@ DISTFILES += \
     images/p1_left.png \
     images/p1_right.png \
     images/p1_up.png \
+    images/p2_up.png \
+    images/redWall.png \
+    images/whiteWall.png \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_up.png \
+    images/redWall.png \
+    images/whiteWall.png \
+    qml/common/LevelBase2.qml \
+    qml/levels/Level1_2.qml \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_down.png \
+    images/p2_left.png \
+    images/p2_right.png \
     images/p2_up.png \
     images/redWall.png \
     images/whiteWall.png
