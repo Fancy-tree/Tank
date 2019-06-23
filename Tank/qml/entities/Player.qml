@@ -12,11 +12,14 @@ EntityBase {
 
   property alias tank: tank
   property int rotate : 1
-  property int life: 5
+  property int life: 3
   property int gameOverp : 0
   property bool activateHitShield: false          // activate shield for short after a hit
   property int activeHitShieldCounter: 0          // count from 0 to 5 every 100 millisecond after being hit by a bullet
-
+  property bool activateShield: false             // for activating powerUpShield
+  property int activeShieldCounter: 0             // count from 0 to 80 every 100 millisecond for the duration of active powerUps
+  property bool activateSpeedUp: false        // for activating powerUpAccelerator
+  property int activeSpeedUpCounter: 0        // count from 0 to 80 every 100 millisecond for the duration of active powerUps
 
   // each player controls a tank
   Tank {
@@ -33,17 +36,15 @@ EntityBase {
     // increase the powerUp timers every 100ms and deactive the effects after a certain time
     // show the current powerUp effects
     onTriggered: {
-//      if (activateShield) {
-//        tank.shield.opacity = 1
-//        activeShieldCounter ++;
-//      }
-//      if (activeShieldCounter === 80) {
-//        activateShield = false;
-//        activeShieldCounter = 0;
-//      }
-//      if (activateShield == false) {
-//        tank.shield.opacity = 0
-//      }
+      if (activateShield) {
+        tank.opacity = 0.5;
+        activeShieldCounter ++;
+      }
+      if (activeShieldCounter === 80) {
+        activateShield = false;
+        activeShieldCounter = 0;
+      }
+
 
       if (activateHitShield) {
         activeHitShieldCounter ++;
@@ -54,12 +55,27 @@ EntityBase {
         activeHitShieldCounter = 0;
         tank.opacity = 1;
       }
+
+      if (activateSpeedUp) {
+        activeSpeedUpCounter ++;
+        if(activeSpeedUpCounter===1){//防止速度叠加
+            gameScene.ourMoveV+=5000
+            gameScene.ourBulletI-=100
+        }
+      }
+      if (activeSpeedUpCounter === 80) {
+        activateSpeedUp = false;
+        activeSpeedUpCounter = 0;
+        gameScene.ourMoveV-=5000
+        gameScene.ourBulletI+=100
+
+      }
     }
   }
 
   function beShoted(){
 
-      if(!activateHitShield){
+      if(!activateHitShield && !activateShield){
           life--;
           console.log("aaaaah")
           activateHitShield=true;

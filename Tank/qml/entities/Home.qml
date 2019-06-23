@@ -36,15 +36,13 @@ EntityBase {
             homeBody.source="../../images/homeBroke.png";
             gameOverh=1;
             gameWindow.gameOver=1;//家毁游戏结束
-            var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy"];
+            var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
             entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
+
             //entityManager.removeAllEntities();
+
         }
     }
-//    function gameOver(){
-//        GameInfo.gameOver=1;
-//        var toRemoveEntityTypes = ["singleBullet"];
-//        entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
-//    }
+
 
 }

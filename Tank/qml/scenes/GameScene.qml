@@ -20,6 +20,10 @@ SceneBase {
     property int canShot: 1
     property int numRound:0//游戏回合记次
     property double canAppear:1//Boss出现后禁止小怪生成
+    property int ourMoveV: 5440//我方move速度
+    property int ourBulletV: 100//我方bullet速度
+    property int ourBulletI: 400//我方bullet间隔时间
+
 
        // set the name of the current level, this will cause the Loader to load the corresponding level
     function setLevel(fileName) {
@@ -36,6 +40,31 @@ SceneBase {
       anchors.fill: parent.gameWindowAnchorItem
       color: "#47688e"
     }
+    Rectangle {
+      anchors.left: parent.left
+      y:parent.height/2-height/2
+      color: "green"
+      height: width
+      width: parent.width/5
+      Text {
+          anchors.centerIn: parent
+          text: qsTr("P1 HP:"+activeLevel.player1.life)
+      }
+    }
+    Rectangle {
+      anchors.right: parent.right
+      y:parent.height/2-height/2
+      color: "green"
+      height: width
+      width: parent.width/5
+
+      Text {
+          anchors.centerIn: parent
+          //opacity: (activeNumPlayers===2) ? 100 : 0
+          text: (activeNumPlayers===2) ? qsTr("P2 HP:"+activeLevel.player2.life) : ""
+      }
+    }
+
 
     MenuButton {
         z:1
@@ -74,6 +103,7 @@ SceneBase {
           timer1.interval=2000;//敌人出现频率重置
           timer.running=true;//随机数开始生成
           canAppear=1;//小怪可以出现
+          countId=0;//id数计算,消除Id重复警告
           var toRemoveEntityTypes = ["singleBullet","enemy"];//需要实体类型相同并赋予拥有唯一id
           entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
@@ -109,11 +139,12 @@ SceneBase {
        text: activeNumPlayers+" Player"
      }
 
-
+     property int countId : 0//id数计算,消除Id重复警告
      Timer {
          id:timer1
               interval: 2000; running:activeLevel && !gameWindow.gameOver; repeat: true //只有进入关卡或游戏不gameover,enemy坦克才会产出
               onTriggered: {
+                  countId++;
                   if(canAppear===1){
                       var startX=105
                       var startY=20
@@ -123,7 +154,7 @@ SceneBase {
                       entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                         "start" : Qt.point(startX, startY),
                                                                         "velocity" : Qt.point(xDirection, yDirection),
-                                                                          "entityId":"enemy"
+                                                                          "entityId":"enemy"+countId
                                                                         });
                       var startX2=190//敌人很快就会来
                       var startY2=20
@@ -132,7 +163,7 @@ SceneBase {
                       entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                         "start" : Qt.point(startX2, startY2),
                                                                         "velocity" : Qt.point(xDirection2, yDirection2),
-                                                                          "entityId":"enemy"
+                                                                          "entityId":"enemy"+countId
                                                                         });
                       var startX3=355
                       var startY3=20
@@ -141,16 +172,16 @@ SceneBase {
                       entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                         "start" : Qt.point(startX3, startY3),
                                                                         "velocity" : Qt.point(xDirection3, yDirection3),
-                                                                          "entityId":"enemy"
+                                                                          "entityId":"enemy"+countId
                                                                         });
 
                   }
 
-                  var num2=getRandomNum(10000,20000);
+                  var num2=getRandomNum(8000,13000);
                   interval=num2;//随机时间
                   numRound++//游戏回合数记次
-                  if(numRound===2){//出现BOSS
-                      var startX4=190//敌人很快就会来
+                  if(numRound===3){//出现BOSS
+                      var startX4=210//
                       var startY4=20
                       var xDirection4=0 //
                       var yDirection4=0 //
@@ -158,7 +189,7 @@ SceneBase {
                       entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
                                                                         "start" : Qt.point(startX4, startY4),
                                                                         "velocity" : Qt.point(xDirection4, yDirection4),
-                                                                          "entityId":"enemy",
+                                                                          "entityId":"enemy"+countId,
                                                                           "variationType": "boss",
                                                                           "v":"6000",
                                                                           "life":"3",
@@ -168,21 +199,21 @@ SceneBase {
 
                   }
 
-                       //判断玩家全都死亡游戏结束,停止产出敌人
-                      if((activeNumPlayers===2 && gameWindow.numPlayerDead===2)||(activeNumPlayers===1 && gameWindow.numPlayerDead===1)){
-                          //console.log("ooooooooover");
-                          gameWindow.gameOver=1;
-                          running=false;
-                          var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy"];
-                          entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
-                      }
-                      if(gameWindow.youWin===1){//如果万一你赢了
-                          gameWindow.gameOver=1;
-                          running=false;
-                          var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy"];
-                          entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
+//                       //判断玩家全都死亡游戏结束,停止产出敌人
+//                      if((activeNumPlayers===2 && gameWindow.numPlayerDead===2)||(activeNumPlayers===1 && gameWindow.numPlayerDead===1)){
+//                          //console.log("ooooooooover");
+//                          gameWindow.gameOver=1;
+//                          running=false;
+//                          var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
+//                          entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
+//                      }
+//                      if(gameWindow.youWin===1){//如果万一你赢了
+//                          gameWindow.gameOver=1;
+//                          running=false;
+//                          var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
+//                          entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
 
-                      }
+//                      }
 
               }
      }
@@ -205,21 +236,23 @@ SceneBase {
             if((activeNumPlayers===2 && gameWindow.numPlayerDead===2)||(activeNumPlayers===1 && gameWindow.numPlayerDead===1)){//随时判断是否玩家全都死亡gameover
                 gameWindow.gameOver=1;
                 running=false;
-                var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy"];
+                timer1.running=false;//判断玩家全都死亡游戏结束,停止产出敌人
+                var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
                 entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
             }
             if(gameWindow.youWin===1){//如果万一你赢了
                 gameWindow.gameOver=1;
                 running=false;
-                var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy"];
+                timer1.running=false;//判断玩家全都死亡游戏结束,停止产出敌人
+                var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd"];
                 entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
             }
         }
      }
 
      Timer {
-              interval: 500; running:isShot===1; repeat: true //玩家发子弹时间间隔
+              interval: ourBulletI; running:isShot===1; repeat: true //玩家发子弹时间间隔
               onTriggered: {
                   canShot=1;
                   isShot=0;
@@ -247,22 +280,22 @@ SceneBase {
          if(actionName == "up") {
             activeLevel.player1.tank.tankBody.source="../../images/p1_up.png"
             activeLevel.player1.rotate = 1
-            activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+            activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
          }else
          if(actionName == "down" ) {
             activeLevel.player1.tank.tankBody.source="../../images/p1_down.png"
             activeLevel.player1.rotate = 3
-            activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+            activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
          }else
          if(actionName == "left") {
             activeLevel.player1.tank.tankBody.source="../../images/p1_left.png"
             activeLevel.player1.rotate = 4
-            activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*170*32,0)
+            activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*ourMoveV,0)
          }else
          if(actionName == "right" ) {
             activeLevel.player1.tank.tankBody.source="../../images/p1_right.png"
             activeLevel.player1.rotate = 2
-            activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*170*32,0)
+            activeLevel.player1.tank.boxCollider.force=Qt.point(controller.xAxis*ourMoveV,0)
          }
          if(actionName == "fire" && canShot ){
              var startX=0
@@ -272,31 +305,32 @@ SceneBase {
              if(activeLevel.player1.rotate===4){
                  startX=activeLevel.player1.tank.x-5
                  startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
-                 xDirection=-100
+                 xDirection=-ourBulletV
                  yDirection=0
              }
              if(activeLevel.player1.rotate===2){
                  startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width+5
                  startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
-                 xDirection=100
+                 xDirection=ourBulletV
                  yDirection=0
              }
              if(activeLevel.player1.rotate===3){
                  startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
                  startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height+5
                  xDirection=0
-                 yDirection=100
+                 yDirection=ourBulletV
              }
              if(activeLevel.player1. rotate===1){
                  startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
                  startY=activeLevel.player1.tank.y-5
                  xDirection=0
-                 yDirection=-100
+                 yDirection=-ourBulletV
              }
 
              entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Bullet.qml"), {
                                                                "start" : Qt.point(startX, startY),
                                                                "velocity" : Qt.point(xDirection, yDirection),
+                                                               "entityId": "singleBullet"+countId
                                                                });
              isShot=1;
              canShot=0;
@@ -320,17 +354,17 @@ SceneBase {
            }
 
            if(actionName == "left" && isPressed("up")) {
-               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
            }
 
            if(actionName == "left" && isPressed("down")) {
-               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
            }
            if(actionName == "right" && isPressed("up")) {
-               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
            }
            if(actionName == "right" && isPressed("down")) {
-               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*170*32)
+               activeLevel.player1.tank.boxCollider.force=Qt.point(0,-controller.yAxis*ourMoveV)
            }
 
 
@@ -358,22 +392,22 @@ SceneBase {
               if(actionName == "up") {
                  activeLevel.player2.tank.tankBody.source="../../images/p2_up.png"
                  activeLevel.player2.rotate = 1
-                 activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                 activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }else
               if(actionName == "down" ) {
                  activeLevel.player2.tank.tankBody.source="../../images/p2_down.png"
                  activeLevel.player2.rotate = 3
-                 activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                 activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }else
               if(actionName == "left") {
                  activeLevel.player2.tank.tankBody.source="../../images/p2_left.png"
                  activeLevel.player2.rotate = 4
-                 activeLevel.player2.tank.boxCollider.force=Qt.point(controller2.xAxis*170*32,0)
+                 activeLevel.player2.tank.boxCollider.force=Qt.point(controller2.xAxis*ourMoveV,0)
               }else
               if(actionName == "right" ) {
                  activeLevel.player2.tank.tankBody.source="../../images/p2_right.png"
                  activeLevel.player2.rotate = 2
-                 activeLevel.player2.tank.boxCollider.force=Qt.point(controller2.xAxis*170*32,0)
+                 activeLevel.player2.tank.boxCollider.force=Qt.point(controller2.xAxis*ourMoveV,0)
               }
               if(actionName == "fire" && canShot ){
                   var startX=0
@@ -382,32 +416,33 @@ SceneBase {
                   var yDirection=0
                   if(activeLevel.player2.rotate===4){
                       startX=activeLevel.player2.tank.x-5
-                      startY=activeLevel.player2.tank.y+activeLevel.player1.tank.height/2
-                      xDirection=-100
+                      startY=activeLevel.player2.tank.y+activeLevel.player2.tank.height/2
+                      xDirection=-ourBulletV
                       yDirection=0
                   }
                   if(activeLevel.player2.rotate===2){
-                      startX=activeLevel.player2.tank.x+activeLevel.player1.tank.width+5
-                      startY=activeLevel.player2.tank.y+activeLevel.player1.tank.height/2
-                      xDirection=100
+                      startX=activeLevel.player2.tank.x+activeLevel.player2.tank.width+5
+                      startY=activeLevel.player2.tank.y+activeLevel.player2.tank.height/2
+                      xDirection=ourBulletV
                       yDirection=0
                   }
                   if(activeLevel.player2.rotate===3){
-                      startX=activeLevel.player2.tank.x+activeLevel.player1.tank.width/2
-                      startY=activeLevel.player2.tank.y+activeLevel.player1.tank.height+5
+                      startX=activeLevel.player2.tank.x+activeLevel.player2.tank.width/2
+                      startY=activeLevel.player2.tank.y+activeLevel.player2.tank.height+5
                       xDirection=0
-                      yDirection=100
+                      yDirection=ourBulletV
                   }
                   if(activeLevel.player2.rotate===1){
-                      startX=activeLevel.player2.tank.x+activeLevel.player1.tank.width/2
+                      startX=activeLevel.player2.tank.x+activeLevel.player2.tank.width/2
                       startY=activeLevel.player2.tank.y-5
                       xDirection=0
-                      yDirection=-100
+                      yDirection=-ourBulletV
                   }
 
                   entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Bullet.qml"), {
                                                                     "start" : Qt.point(startX, startY),
                                                                     "velocity" : Qt.point(xDirection, yDirection),
+                                                                    "entityId": "singleBullet"+countId
                                                                     });
                    isShot=1;
                    canShot=0;
@@ -433,17 +468,17 @@ SceneBase {
               }
 
               if(actionName == "left" && isPressed("up")) {
-                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }
 
               if(actionName == "left" && isPressed("down")) {
-                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }
               if(actionName == "right" && isPressed("up")) {
-                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }
               if(actionName == "right" && isPressed("down")) {
-                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*170*32)
+                  activeLevel.player2.tank.boxCollider.force=Qt.point(0,-controller2.yAxis*ourMoveV)
               }
 
           }

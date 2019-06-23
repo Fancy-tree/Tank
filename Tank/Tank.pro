@@ -141,4 +141,65 @@ DISTFILES += \
     images/redWall.png \
     images/whiteWall.png \
     qml/entities/EvilBullet.qml \
-    qml/entities/Enemy.qml
+    qml/entities/Enemy.qml \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_down.png \
+    images/p2_left.png \
+    images/p2_right.png \
+    images/p2_up.png \
+    images/prop_shield.png \
+    images/redWall.png \
+    images/whiteWall.png \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_down.png \
+    images/p2_left.png \
+    images/p2_right.png \
+    images/p2_up.png \
+    images/prop_shield.png \
+    images/redWall.png \
+    images/whiteWall.png \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_down.png \
+    images/p2_left.png \
+    images/p2_right.png \
+    images/p2_up.png \
+    images/prop_lifeAdd.png \
+    images/prop_shield.png \
+    images/redWall.png \
+    images/whiteWall.png \
+    qml/entities/props/LifeAdd.qml \
+    qml/entities/props/SpeedUp.qml \
+    images/bullet.gif \
+    images/home.png \
+    images/homeBroke.png \
+    images/p1_down.png \
+    images/p1_left.png \
+    images/p1_right.png \
+    images/p1_up.png \
+    images/p2_down.png \
+    images/p2_left.png \
+    images/p2_right.png \
+    images/p2_up.png \
+    images/prop_lifeAdd.png \
+    images/prop_shield.png \
+    images/prop_speedUp.png \
+    images/redWall.png \
+    images/whiteWall.png
