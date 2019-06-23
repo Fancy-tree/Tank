@@ -18,6 +18,7 @@ GameWindow {
   property int gameOver :0
   property int numPlayerDead :0
   property int player1Dead :0
+  property int youWin :0
 
   MenuScene {
     id: menuScene

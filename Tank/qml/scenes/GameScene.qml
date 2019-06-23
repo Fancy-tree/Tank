@@ -18,6 +18,8 @@ SceneBase {
 
     property int isShot: 0
     property int canShot: 1
+    property int numRound:0//游戏回合记次
+    property double canAppear:1//Boss出现后禁止小怪生成
 
        // set the name of the current level, this will cause the Loader to load the corresponding level
     function setLevel(fileName) {
@@ -56,6 +58,7 @@ SceneBase {
       //z: 1000
 
     }
+
     // load levels at runtime
     Loader {
       id: loader
@@ -66,9 +69,12 @@ SceneBase {
           gameWindow.gameOver=0;
           gameWindow.numPlayerDead=0;
           gameWindow.player1Dead=0;
+          gameWindow.youWin=0;
+          numRound=0//游戏回合置0
           timer1.interval=2000;//敌人出现频率重置
           timer.running=true;//随机数开始生成
-          var toRemoveEntityTypes = ["singleBullet","enemy"];
+          canAppear=1;//小怪可以出现
+          var toRemoveEntityTypes = ["singleBullet","enemy"];//需要实体类型相同并赋予拥有唯一id
           entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
 
@@ -103,40 +109,65 @@ SceneBase {
        text: activeNumPlayers+" Player"
      }
 
+
      Timer {
          id:timer1
               interval: 2000; running:activeLevel && !gameWindow.gameOver; repeat: true //只有进入关卡或游戏不gameover,enemy坦克才会产出
               onTriggered: {
-                  var startX=105
-                  var startY=20
-                  var xDirection=0 //
-                  var yDirection=0 //
+                  if(canAppear===1){
+                      var startX=105
+                      var startY=20
+                      var xDirection=0 //
+                      var yDirection=0 //
 
-                  entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                    "start" : Qt.point(startX, startY),
-                                                                    "velocity" : Qt.point(xDirection, yDirection),
-                                                                      "entityId":"enemy"
-                                                                    });
-                  var startX2=230
-                  var startY2=20
-                  var xDirection2=0 //
-                  var yDirection2=0 //
-                  entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                    "start" : Qt.point(startX2, startY2),
-                                                                    "velocity" : Qt.point(xDirection2, yDirection2),
-                                                                      "entityId":"enemy"
-                                                                    });
-                  var startX3=355
-                  var startY3=20
-                  var xDirection3=0 //
-                  var yDirection3=0 //
-                  entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                    "start" : Qt.point(startX3, startY3),
-                                                                    "velocity" : Qt.point(xDirection3, yDirection3),
-                                                                      "entityId":"enemy"
-                                                                    });
+                      entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
+                                                                        "start" : Qt.point(startX, startY),
+                                                                        "velocity" : Qt.point(xDirection, yDirection),
+                                                                          "entityId":"enemy"
+                                                                        });
+                      var startX2=190//敌人很快就会来
+                      var startY2=20
+                      var xDirection2=0 //
+                      var yDirection2=0 //
+                      entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
+                                                                        "start" : Qt.point(startX2, startY2),
+                                                                        "velocity" : Qt.point(xDirection2, yDirection2),
+                                                                          "entityId":"enemy"
+                                                                        });
+                      var startX3=355
+                      var startY3=20
+                      var xDirection3=0 //
+                      var yDirection3=0 //
+                      entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
+                                                                        "start" : Qt.point(startX3, startY3),
+                                                                        "velocity" : Qt.point(xDirection3, yDirection3),
+                                                                          "entityId":"enemy"
+                                                                        });
+
+                  }
+
                   var num2=getRandomNum(10000,20000);
                   interval=num2;//随机时间
+                  numRound++//游戏回合数记次
+                  if(numRound===2){//出现BOSS
+                      var startX4=190//敌人很快就会来
+                      var startY4=20
+                      var xDirection4=0 //
+                      var yDirection4=0 //
+
+                      entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
+                                                                        "start" : Qt.point(startX4, startY4),
+                                                                        "velocity" : Qt.point(xDirection4, yDirection4),
+                                                                          "entityId":"enemy",
+                                                                          "variationType": "boss",
+                                                                          "v":"6000",
+                                                                          "life":"3",
+                                                                          "imageName":"p2",
+                                                                        });
+                      canAppear=0;
+
+                  }
+
                        //判断玩家全都死亡游戏结束,停止产出敌人
                       if((activeNumPlayers===2 && gameWindow.numPlayerDead===2)||(activeNumPlayers===1 && gameWindow.numPlayerDead===1)){
                           //console.log("ooooooooover");
@@ -145,9 +176,17 @@ SceneBase {
                           var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy"];
                           entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
                       }
+                      if(gameWindow.youWin===1){//如果万一你赢了
+                          gameWindow.gameOver=1;
+                          running=false;
+                          var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy"];
+                          entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
+
+                      }
 
               }
      }
+
      property double rand: Math.random()
      function getRandomNum(Min,Max){
         var Range = Max - Min;
@@ -155,7 +194,6 @@ SceneBase {
 
      }
 
-    //property int rand2000
      Timer{
         id:timer
         interval: 100
@@ -171,9 +209,13 @@ SceneBase {
                 entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 
             }
-
+            if(gameWindow.youWin===1){//如果万一你赢了
+                gameWindow.gameOver=1;
+                running=false;
+                var toRemoveEntityTypes2 = ["singleBullet","p1","p2","enemy"];
+                entityManager.removeEntitiesByFilter(toRemoveEntityTypes2);
+            }
         }
-
      }
 
      Timer {
@@ -190,7 +232,7 @@ SceneBase {
        id: controller
        //shot
        inputActionsToKeyCode: {
-           "up": Qt.Key_Up,
+              "up": Qt.Key_Up,
               "down": Qt.Key_Down,
               "left": Qt.Key_Left,
               "right": Qt.Key_Right,

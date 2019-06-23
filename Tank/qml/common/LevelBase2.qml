@@ -232,21 +232,44 @@ Item {
       }
     }
 
-//    Enemy {
-//      z: 2
-//      id: enemy1
-//      entityId: "enemy1"
-//      variationType: "enemy1"
-//      tank.entityId: "enemy1"
-//      tank.variationType: "enemy1"
-//      tank.originX: 200
-//      tank.originY: 200
-//      rotation: 0
 
-//      life: 1
+    // show the game over message at the end of each game
+    Rectangle {
+      z: 20
+      id: youwin
+      color: "white"
+      anchors.centerIn: parent
+      width: 200
+      height: 80
+      radius: 10
+      border.width: 5
+      border.color: "lightgrey"
+      opacity:  (gameWindow.youWin===1) ? 100 : 0//判断YouWin
 
-//      //tank.rotation: 0
-//    }
+
+      // game over message in the color of the winner
+      Text {
+        id: textWinner2
+        text: "You Win"
+        color: "black"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 18
+        font.pixelSize: 14
+
+      }
+
+      // game statistic
+      Text {
+        id: textStatistic2
+        text: "Unbelievable!"
+        font.pixelSize: 12
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 14+7
+        horizontalAlignment:  Text.AlignHCenter
+      }
+    }
 
 
 }

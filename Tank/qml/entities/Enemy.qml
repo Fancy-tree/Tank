@@ -10,6 +10,7 @@ EntityBase {
   id: enemy
   variationType: "enemy1"
   entityType: "enemy"
+  entityId: "enemy"
   x: start.x
   y: start.y
 
@@ -24,6 +25,7 @@ EntityBase {
   property int life: 1
   property int rotate: 3
   property int v: 4000//敌人速度
+  property string imageName: "p1"
 
 
 
@@ -31,7 +33,7 @@ EntityBase {
   Image {
     id: tankBody
     anchors.fill:parent
-    source: "../../images/p1_down.png"
+    source: "../../images/"+imageName+"_down.png"
   }
 
 
@@ -63,19 +65,19 @@ EntityBase {
         if(num===1){
             force=Qt.point(0,-v)
             rotate=1;
-            tankBody.source="../../images/p1_up.png"
+            tankBody.source="../../images/"+imageName+"_up.png"
         }else if(num===2){
             force=Qt.point(v,0)
             rotate=2;
-            tankBody.source="../../images/p1_right.png"
+            tankBody.source="../../images/"+imageName+"_right.png"
         }else if(num===3){
             force=Qt.point(0,v)
             rotate=3;
-            tankBody.source="../../images/p1_down.png"
+            tankBody.source="../../images/"+imageName+"_down.png"
         }else if(num===4){
             force=Qt.point(-v,0)
             rotate=4;
-            tankBody.source="../../images/p1_left.png"
+            tankBody.source="../../images/"+imageName+"_left.png"
         }else{
             console.log("rand error")
         }
@@ -115,20 +117,20 @@ EntityBase {
              if(num===1){
 //                 boxCollider.force=Qt.point(0,-v)
 //                 rotate=1;
-//                 tankBody.source="../../images/p1_up.png"
+//                 tankBody.source="../../images/"+imageName+"_up.png"
 
              }else if(num===2){
                  boxCollider.force=Qt.point(v,0)
                  rotate=2;
-                 tankBody.source="../../images/p1_right.png"
+                 tankBody.source="../../images/"+imageName+"_right.png"
              }else if(num===3){
                  boxCollider.force=Qt.point(0,v)
                  rotate=3;
-                 tankBody.source="../../images/p1_down.png"
+                 tankBody.source="../../images/"+imageName+"_down.png"
              }else if(num===4){
                  boxCollider.force=Qt.point(-v,0)
                  rotate=4;
-                 tankBody.source="../../images/p1_left.png"
+                 tankBody.source="../../images/"+imageName+"_left.png"
              }else{
                  console.log("rand error")
              }
@@ -142,44 +144,6 @@ EntityBase {
   }
 
 
-// property int ox:start.x
-// property int oy:start.y
-
-// Timer{
-//    id:timer2
-//    interval: 100
-//    repeat: true
-//    running: true
-//    onTriggered: {
-//        if(ox===enemy.x && oy===enemy.y){
-//            var num=getRandomNum(1,4)
-//            if(num===1){
-//                boxCollider.force=Qt.point(0,-2000)
-//                rotate=1;
-//                tankBody.source="../../images/p1_up.png"
-
-//            }else if(num===2){
-//                boxCollider.force=Qt.point(2000,0)
-//                rotate=2;
-//                tankBody.source="../../images/p1_right.png"
-//            }else if(num===3){
-//                boxCollider.force=Qt.point(0,2000)
-//                rotate=3;
-//                tankBody.source="../../images/p1_down.png"
-//            }else if(num===4){
-//                boxCollider.force=Qt.point(-2000,0)
-//                rotate=4;
-//                tankBody.source="../../images/p1_left.png"
-//            }else{
-//                console.log("rand error")
-//            }
-//            console.log("change")
-//        }
-//        ox=enemy.x
-//        oy=enemy.y
-//    }
-
-// }
 
 
 Timer{
@@ -251,7 +215,10 @@ Timer{
 
       life--;
       console.log("yaaaah")
-      if(life===0)enemy.destroy();
+      if(life===0){
+          if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
+          enemy.destroy();
+      }
 }
 
 //  function gameOver(){
