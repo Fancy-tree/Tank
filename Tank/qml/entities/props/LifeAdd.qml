@@ -8,7 +8,7 @@ EntityBase {
   entityId : "propLifeAdd"
   entityType: "propLifeAdd"
 
-  width: 10
+  width: 12
   height: width
 
   x: start.x
@@ -18,7 +18,7 @@ EntityBase {
   property point start
   property point velocity
 
-  property int propLifeAddAppearTime: 5000//道具存在时间
+  property int propLifeAddAppearTime: 10000//道具存在时间
   property int propLifeAddIsAppear: 0
 
 
@@ -89,6 +89,24 @@ EntityBase {
      }
 
   }
+
+//闪烁
+  property int count: 1
+  Timer{
+     id:timer2
+     interval:300
+     running: propLifeAddIsAppear
+     repeat: true
+     onTriggered: {
+         if(count%2===1)propLifeAdd.opacity=0
+         else propLifeAdd.opacity=1
+         count++;
+
+     }
+  }
+
+
+
 }
 
 

@@ -84,7 +84,7 @@ EntityBase {
               tank.y=tank.originY;
               player.rotate=0;
               if(variationType==="p1")tank.tankBody.source="../../images/p1_up.png"
-              if(variationType==="p2")tank.tankBody.source="../../images/p2_up.png"
+//              if(variationType==="p2")tank.tankBody.source="../../images/p2_up.png"
 
       }
 

@@ -8,7 +8,7 @@ EntityBase {
   entityId : "propShield"
   entityType: "propShield"
 
-  width: 10
+  width: 12
   height: width
 
   x: start.x
@@ -18,7 +18,7 @@ EntityBase {
   property point start
   property point velocity
 
-  property int propShieldAppearTime: 5000//道具存在时间
+  property int propShieldAppearTime: 10000//道具存在时间
   property int propShieldIsAppear: 0
 
 
@@ -91,6 +91,22 @@ EntityBase {
      }
 
   }
+
+  //闪烁
+    property int count: 1
+    Timer{
+       id:timer2
+       interval:300
+       running: propShieldIsAppear
+       repeat: true
+       onTriggered: {
+           if(count%2===1)propShield.opacity=0
+           else propShield.opacity=1
+           count++;
+
+       }
+    }
+
 }
 
 

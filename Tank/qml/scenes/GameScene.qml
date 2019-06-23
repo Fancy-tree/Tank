@@ -22,7 +22,7 @@ SceneBase {
     property double canAppear:1//Boss出现后禁止小怪生成
     property int ourMoveV: 5440//我方move速度
     property int ourBulletV: 100//我方bullet速度
-    property int ourBulletI: 500//我方bullet间隔时间
+    property int ourBulletI: 500//我方bullet间隔时间//手机端子弹发射速度失控
     property int score: 0//我方总分
 
 
@@ -47,6 +47,7 @@ SceneBase {
       width: parent.width/5
       Text {
           anchors.centerIn: parent
+          font.pointSize:10
           text: "P1 HP:"+activeLevel.player1.life
       }
     }
@@ -60,7 +61,7 @@ SceneBase {
 
       Text {
           anchors.centerIn: parent
-          //opacity: (activeNumPlayers===2) ? 100 : 0
+          font.pointSize:10
           text: "Score: "+score +"\n" +"Enemys: "+sumEnemy
       }
     }
@@ -152,7 +153,7 @@ SceneBase {
                                                                             "velocity" : Qt.point(xDirection, yDirection),
                                                                               "entityId":"enemy"+countId
                                                                             });
-                          var startX2=190//敌人很快就会来
+                          var startX2=230
                           var startY2=20
                           var xDirection2=0 //
                           var yDirection2=0 //
@@ -173,45 +174,31 @@ SceneBase {
                           numMapEnemy+=3;
 
                       }
-                      if(numMapEnemy<sumEnemy && numMapEnemy<maxMapEnemy){
-                          var num3=getRandomNum(1,3);
-                          var num4=getRandomNum(105,355)
-                          if(num3===1){
-                              var startX4=num4
-                              var startY4=20
-                              var xDirection4=0 //
-                              var yDirection4=0 //
-
-                              entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                                "start" : Qt.point(startX4, startY4),
-                                                                                "velocity" : Qt.point(xDirection4, yDirection4),
-                                                                                  "entityId":"enemy"+countId
-                                                                                });
-
-                          }else if(num3===2){
-                              var startX5=num4
-                              var startY5=20
-                              var xDirection5=0 //
-                              var yDirection5=0 //
-                              entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                                "start" : Qt.point(startX5, startY5),
-                                                                                "velocity" : Qt.point(xDirection5, yDirection5),
-                                                                                  "entityId":"enemy"+countId
-                                                                                });
-
-
-                          }else if(num3===3){
-                              var startX6=num4
-                              var startY6=20
-                              var xDirection6=0 //
-                              var yDirection6=0 //
-                              entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
-                                                                                "start" : Qt.point(startX6, startY6),
-                                                                                "velocity" : Qt.point(xDirection6, yDirection6),
-                                                                                  "entityId":"enemy"+countId
-                                                                                });
+                      if(numRound!==0 && numMapEnemy<sumEnemy && numMapEnemy<maxMapEnemy){
+                          //var num3=getRandomNum(1,3);
+                          var num4=getRandomNum(105,355)//随机地点
+                          var num5=getRandomNum(1,5);//随机敌人种类
+                          var variationType ="normal"
+                          //num5=5;
+                          if(num5===3){
+                              variationType ="speed"
+                          }else if(num5===5){
+                              variationType ="strong"
 
                           }
+
+                          var startX4=num4
+                          var startY4=20
+                          var xDirection4=0 //
+                          var yDirection4=0 //
+
+                          entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Enemy.qml"), {
+                                                                            "start" : Qt.point(startX4, startY4),
+                                                                            "velocity" : Qt.point(xDirection4, yDirection4),
+                                                                              "entityId":"enemy"+countId,
+                                                                              "variationType":variationType,
+                                                                            });
+
                           numMapEnemy++
 
 
@@ -295,42 +282,47 @@ SceneBase {
            MultiPointTouchArea {
              anchors.fill: parent
              onPressed: {
-                 var startX=0
-                 var startY=0
-                 var xDirection=0 //玩家子弹速度
-                 var yDirection=0 //玩家子弹速度
-                 if(activeLevel.player1.rotate===4){
-                     startX=activeLevel.player1.tank.x-5
-                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
-                     xDirection=-ourBulletV
-                     yDirection=0
-                 }
-                 if(activeLevel.player1.rotate===2){
-                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width+5
-                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
-                     xDirection=ourBulletV
-                     yDirection=0
-                 }
-                 if(activeLevel.player1.rotate===3){
-                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
-                     startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height+5
-                     xDirection=0
-                     yDirection=ourBulletV
-                 }
-                 if(activeLevel.player1. rotate===1){
-                     startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
-                     startY=activeLevel.player1.tank.y-5
-                     xDirection=0
-                     yDirection=-ourBulletV
+                 if(canShot){
+                     var startX=0
+                     var startY=0
+                     var xDirection=0 //玩家子弹速度
+                     var yDirection=0 //玩家子弹速度
+                     if(activeLevel.player1.rotate===4){
+                         startX=activeLevel.player1.tank.x-5
+                         startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
+                         xDirection=-ourBulletV
+                         yDirection=0
+                     }
+                     if(activeLevel.player1.rotate===2){
+                         startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width+5
+                         startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height/2
+                         xDirection=ourBulletV
+                         yDirection=0
+                     }
+                     if(activeLevel.player1.rotate===3){
+                         startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
+                         startY=activeLevel.player1.tank.y+activeLevel.player1.tank.height+5
+                         xDirection=0
+                         yDirection=ourBulletV
+                     }
+                     if(activeLevel.player1. rotate===1){
+                         startX=activeLevel.player1.tank.x+activeLevel.player1.tank.width/2
+                         startY=activeLevel.player1.tank.y-5
+                         xDirection=0
+                         yDirection=-ourBulletV
+                     }
+
+                     entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Bullet.qml"), {
+                                                                       "start" : Qt.point(startX, startY),
+                                                                       "velocity" : Qt.point(xDirection, yDirection),
+                                                                       "entityId": "singleBullet"+countId
+                                                                       });
+                     isShot=1;
+                     canShot=0;
+
                  }
 
-                 entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/Bullet.qml"), {
-                                                                   "start" : Qt.point(startX, startY),
-                                                                   "velocity" : Qt.point(xDirection, yDirection),
-                                                                   "entityId": "singleBullet"+countId
-                                                                   });
-                 isShot=1;
-                 canShot=0;
+
              }
              onUpdated: {
 

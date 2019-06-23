@@ -8,7 +8,7 @@ import "../"
 
 EntityBase {
   id: enemy
-  variationType: "enemy1"
+  variationType: "normal"
   entityType: "enemy"
   entityId: "enemy"
   x: start.x
@@ -22,14 +22,20 @@ EntityBase {
   property point start
   property point velocity
 
-  property int life: 1
+  property int life: (variationType === "strong") ? 3 : 1
   property int rotate: 3
-  property int enemyMoveV: 3000//敌人move速度
+  property int enemyMoveV: (variationType === "speed") ? 6000 : 3000//敌人move速度
   property int enemyBulletV: 100//敌人Bullet速度
 
-  property string imageName: "p1"
+  property string imageName:"enemyNormal"
 
 property int countId : 0//id数计算,消除Id重复警告
+
+  onEntityCreated: {
+      if(variationType === "speed")imageName="enemySpeed";
+      else if(variationType === "strong")imageName="enemyStrong";
+
+  }
 
 
 
@@ -38,6 +44,7 @@ property int countId : 0//id数计算,消除Id重复警告
     id: tankBody
     anchors.fill:parent
     source: "../../images/"+imageName+"_down.png"
+
   }
 
 
@@ -189,7 +196,10 @@ Timer{
                                                               "entityId":"evilBullet"+countId
                                                             });
 
-        var num2=getRandomNum(500,1500);//敌人Bullet间隔
+        var num2;//敌人Bullet间隔
+        if(variationType === "speed") num2=getRandomNum(400,800);
+        else num2=getRandomNum(500,1000);
+
         interval=num2;//随机时间发射子弹
     }
 
@@ -216,15 +226,28 @@ Timer{
 
   function beShoted(){
 
-      life--;
-      console.log("yaaaah")
+      if(life!==0){
+          life--;
+          if(life===2&&variationType==="strong"){
+              imageName="enemyStrong_yellow";
+          }if(variationType==="strong"&&life===1){
+              imageName="enemyStrong_gray";
+          }
+
+          console.log("yaaaah")
+      }
+
+
       if(life===0){
-//          if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
+//        if(variationType==="boss"){gameWindow.youWin=1;}//boss打败游戏胜利
           var num1=getRandomNum(0,8);//随机道具
+          var numx=getRandomNum(105,355);//道具随机地点
+          var numy=getRandomNum(20,250);//道具随机地点
+
           //num1=4
           if(num1===3){
-              var startX=enemy.x
-              var startY=enemy.y
+              var startX=numx
+              var startY=numy
               var xDirection=0 //
               var yDirection=0 //
 
@@ -235,8 +258,8 @@ Timer{
                                                                   "entityType": "propLifeAdd"
                                                                 });
           }if(num1===2){
-              var startX2=enemy.x
-              var startY2=enemy.y
+              var startX2=numx
+              var startY2=numy
               var xDirection2=0 //
               var yDirection2=0 //
 
@@ -247,8 +270,8 @@ Timer{
                                                                   "entityType": "propLifeAdd"
                                                                 });
           }if(num1===4){
-              var startX3=enemy.x
-              var startY3=enemy.y
+              var startX3=numx
+              var startY3=numy
               var xDirection3=0 //
               var yDirection3=0 //
 
@@ -263,7 +286,14 @@ Timer{
           enemy.destroy();
           gameScene.numMapEnemy--;
           gameScene.sumEnemy--;
-          gameScene.score+=200;
+          if(variationType==="speed"){
+              gameScene.score+=300;
+          }else if(variationType==="strong"){
+              gameScene.score+=400;
+          }
+          else{
+              gameScene.score+=200;
+          }
 
       }
 }
