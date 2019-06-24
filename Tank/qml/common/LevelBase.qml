@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Felgo 3.0
 import "../"
 import "../entities"
-import "../scenes"
+//import "../controls"
 
 Item {
   id: levelBaseScene
@@ -192,6 +192,10 @@ Item {
       border.width: 5
       border.color: "lightgrey"
       opacity:  (home.gameOverh || (gameWindow.numPlayerDead===1))? 100 : 0
+      Image {
+          anchors.fill: parent
+          source: "../../assets/images/21.jpg"
+      }
 
 
       // game over message in the color of the winner

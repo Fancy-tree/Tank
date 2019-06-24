@@ -29,7 +29,7 @@ EntityBase {
     id: propShieldImage
     width: parent.width
     height: parent.height
-    source: "../../../images/prop_shield.png"
+    source: "../../../assets/images/prop_shield.png"
     anchors.centerIn: parent
 
   }

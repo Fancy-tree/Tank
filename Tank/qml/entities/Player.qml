@@ -25,7 +25,7 @@ EntityBase {
   Tank {
     //property bool currentlyBeaming: false   // whether the player is currently teleporting with the igloos or not
     id: tank
-    tankBody.source: variationType === "p1" ? "../../images/p1_up.png" : "../../images/p2_up.png"
+    tankBody.source: variationType === "p1" ? "../../assets/images/p1_up.png" : "../../assets/simages/p2_up.png"
     //this is Tank's variationType!!
   }
 
@@ -78,12 +78,14 @@ EntityBase {
       if(!activateHitShield && !activateShield){
           life--;
           console.log("aaaaah")
+          startblast.play()
           activateHitShield=true;
 
               tank.x=tank.originX;
               tank.y=tank.originY;
+              add.start()
               player.rotate=0;
-              if(variationType==="p1")tank.tankBody.source="../../images/p1_up.png"
+              if(variationType==="p1")tank.tankBody.source="../../assets/images/p1_up.png"
 //              if(variationType==="p2")tank.tankBody.source="../../images/p2_up.png"
 
       }
@@ -97,11 +99,28 @@ EntityBase {
 //          entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
       }
 }
+  SoundEffect {
+    volume: 0.3
+    id: startblast
+    // an ogg file is not playable on windows, because the extension is not supported!
+    source: "../../assets/send/blast.wav"
+  }
 
 //  function gameOver(){
 //      GameInfo.gameOver=1;
 //      var toRemoveEntityTypes = ["singleBullet"];
 //      entityManager.removeEntitiesByFilter(toRemoveEntityTypes);
 //  }
+  SoundEffect {
+    volume: 0.3
+    id: startadd
+    // an ogg file is not playable on windows, because the extension is not supported!
+    source: "../../assets/send/add.wav"
+  }
+  Timer{
+      id:add
+      interval: 1000
+      onTriggered: startadd.play()
+  }
 
 }

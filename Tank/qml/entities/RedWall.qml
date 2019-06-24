@@ -22,7 +22,7 @@ EntityBase {
   Image {
     id: redWallBody
     anchors.fill: parent
-    source:"../../images/redWall.png"
+    source:"../../assets/images/redWall.png"
   }
 
   BoxCollider {

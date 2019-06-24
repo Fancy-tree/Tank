@@ -29,7 +29,7 @@ EntityBase {
     id: propLifeAddImage
     width: parent.width
     height: parent.height
-    source: "../../../images/prop_lifeAdd.png"
+    source: "../../../assets/images/prop_lifeAdd.png"
     anchors.centerIn: parent
 
   }

@@ -18,7 +18,7 @@ EntityBase {
   Image {
     width: 7
     height: 14
-    source:  "../../images/bullet.gif"
+    source:  "../../assets/images/bullet.gif"
     anchors.centerIn: parent
   }
 

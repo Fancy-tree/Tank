@@ -1,6 +1,6 @@
 import Felgo 3.0
 import QtQuick 2.0
-import"../../images"
+import"../../assets/images"
 
 
 EntityBase {
@@ -10,7 +10,7 @@ EntityBase {
     Image {
         id: wall2Body
         anchors.fill: parent
-        source: "../../images/Wall2.png"
+        source: "../../assets/images/Wall2.png"
     }
     BoxCollider{
         id:boxCollider

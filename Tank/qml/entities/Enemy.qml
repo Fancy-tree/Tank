@@ -14,7 +14,7 @@ EntityBase {
   x: start.x
   y: start.y
 
-  width: 21.4-5-2
+  width: 21.4-5
   height: width
 
   property alias tankBody: tankBody
@@ -44,7 +44,7 @@ property int countId : 0//id数计算,消除Id重复警告
     id: tankBody
     anchors.fill:parent
     asynchronous:true//异步//敌人变色不会卡
-    source: "../../images/"+imageName+"_down.png"
+    source: "../../assets/images/"+imageName+"_down.png"
 
   }
 
@@ -77,19 +77,19 @@ property int countId : 0//id数计算,消除Id重复警告
         if(num===1){
             force=Qt.point(0,-enemyMoveV)
             rotate=1;
-            tankBody.source="../../images/"+imageName+"_up.png"
+            tankBody.source="../../assets/images/"+imageName+"_up.png"
         }else if(num===2){
             force=Qt.point(enemyMoveV,0)
             rotate=2;
-            tankBody.source="../../images/"+imageName+"_right.png"
+            tankBody.source="../../assets/images/"+imageName+"_right.png"
         }else if(num===3){
             force=Qt.point(0,enemyMoveV)
             rotate=3;
-            tankBody.source="../../images/"+imageName+"_down.png"
+            tankBody.source="../../assets/images/"+imageName+"_down.png"
         }else if(num===4){
             force=Qt.point(-enemyMoveV,0)
             rotate=4;
-            tankBody.source="../../images/"+imageName+"_left.png"
+            tankBody.source="../../assets/images/"+imageName+"_left.png"
         }else{
             console.log("rand error")
         }
@@ -123,25 +123,25 @@ property int countId : 0//id数计算,消除Id重复警告
      repeat: true
      running: true
      onTriggered: {
-
+        // if(gameWindow.gameover===0){
              var num=getRandomNum(1,4)
              if(num===1){
 //                 boxCollider.force=Qt.point(0,-enemyMoveV)
 //                 rotate=1;
-//                 tankBody.source="../../images/"+imageName+"_up.png"
+//                 tankBody.source="../../assets/images/"+imageName+"_up.png"
 
              }else if(num===2){
                  boxCollider.force=Qt.point(enemyMoveV,0)
                  rotate=2;
-                 tankBody.source="../../images/"+imageName+"_right.png"
+                 tankBody.source="../../assets/images/"+imageName+"_right.png"
              }else if(num===3){
                  boxCollider.force=Qt.point(0,enemyMoveV)
                  rotate=3;
-                 tankBody.source="../../images/"+imageName+"_down.png"
+                 tankBody.source="../../assets/images/"+imageName+"_down.png"
              }else if(num===4){
                  boxCollider.force=Qt.point(-enemyMoveV,0)
                  rotate=4;
-                 tankBody.source="../../images/"+imageName+"_left.png"
+                 tankBody.source="../../assets/images/"+imageName+"_left.png"
              }else{
                  console.log("rand error")
              }
@@ -151,6 +151,10 @@ property int countId : 0//id数计算,消除Id重复警告
              interval=num2;//随机时间改变一次方向
 
      }
+
+    //     }
+
+
 
   }
 
@@ -163,47 +167,51 @@ Timer{
     repeat: true
     running: true
     onTriggered: {
-        countId++;
-        var startX=0
-        var startY=0
-        var xDirection=0 //
-        var yDirection=0 //
-        if(rotate===4){
-            startX=enemy.x-5
-            startY=enemy.y+height/2
-            xDirection=-enemyBulletV
-            yDirection=0
-        }
-        if(rotate===2){
-            startX=enemy.x+width+5
-            startY=enemy.y+height/2
-            xDirection=enemyBulletV
-            yDirection=0
-        }
-        if(rotate===3){
-            startX=enemy.x+width/2
-            startY=enemy.y+height+5
-            xDirection=0
-            yDirection=enemyBulletV
-        }
-        if(rotate===1){
-            startX=enemy.x+width/2
-            startY=enemy.y-5
-            xDirection=0
-            yDirection=-enemyBulletV
-        }
-        entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/EvilBullet.qml"), {
-                                                            "start" : Qt.point(startX, startY),
-                                                            "velocity" : Qt.point(xDirection, yDirection),
-                                                              "entityId":"evilBullet"+countId
-                                                            });
+   //     if(gameWindow.gameover===0){
+            countId++;
+            var startX=0
+            var startY=0
+            var xDirection=0 //
+            var yDirection=0 //
+            if(rotate===4){
+                startX=enemy.x-5
+                startY=enemy.y+height/2
+                xDirection=-enemyBulletV
+                yDirection=0
+            }
+            if(rotate===2){
+                startX=enemy.x+width+5
+                startY=enemy.y+height/2
+                xDirection=enemyBulletV
+                yDirection=0
+            }
+            if(rotate===3){
+                startX=enemy.x+width/2
+                startY=enemy.y+height+5
+                xDirection=0
+                yDirection=enemyBulletV
+            }
+            if(rotate===1){
+                startX=enemy.x+width/2
+                startY=enemy.y-5
+                xDirection=0
+                yDirection=-enemyBulletV
+            }
+            entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/EvilBullet.qml"), {
+                                                                "start" : Qt.point(startX, startY),
+                                                                "velocity" : Qt.point(xDirection, yDirection),
+                                                                  "entityId":"evilBullet"+countId
+                                                                });
 
-        var num2;//敌人Bullet间隔
-        if(variationType === "speed") num2=getRandomNum(400,1000);
-        else num2=getRandomNum(500,1500);
+            var num2;//敌人Bullet间隔
+            if(variationType === "speed") num2=getRandomNum(2000,5000);
+            else num2=getRandomNum(500,1500);
 
-        interval=num2;//随机时间发射子弹
-    }
+            interval=num2;//随机时间发射子弹
+        }
+   //     }
+
+
 
 
 
@@ -226,6 +234,8 @@ Timer{
   }
 
 
+
+
   function beShoted(){
 
       if(life!==0){
@@ -241,6 +251,16 @@ Timer{
 
 
       if(life===0){
+//          die.start()
+          var startX4=enemy.x
+          var startY4=enemy.y
+
+          entityManager.createEntityFromUrlWithProperties(
+                Qt.resolvedUrl("../entities/Boom.qml"), {
+                          "start":Qt.point(startX4, startY4),
+
+                }
+                );
 
           var num1//随机道具  概率随打败怪物强弱改变
           if(variationType==="speed"){
@@ -261,6 +281,8 @@ Timer{
               var startY=numy
               var xDirection=0 //
               var yDirection=0 //
+
+
 
               entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../entities/props/Shield.qml"), {
                                                                 "start" : Qt.point(startX, startY),
@@ -294,26 +316,40 @@ Timer{
                                                                 });
           }
 
+
+
           enemy.destroy();
+
           gameScene.numMapEnemy--;
           gameScene.sumEnemy--;
 
 
           if(variationType==="speed"){
               gameScene.score+=300;
-              gameScene.deadSpeedEnemy++;
+               gameScene.deadSpeedEnemy++;
+
           }else if(variationType==="strong"){
               gameScene.score+=400;
-              gameScene.deadStrongEnemy++;
+               gameScene.deadStrongEnemy++;
           }
           else{
               gameScene.score+=200;
-              gameScene.deadStrongEnemy++;
+              gameScene.deadNormalEnemy++;
           }
 
       }
 }
-
+//  SoundEffect {
+//    volume: 0.3
+//    id: starthit
+//    // an ogg file is not playable on windows, because the extension is not supported!
+//    source: "../../assets/send/hit.wav"
+//  }
+//  Timer{
+//      id:hit
+//      interval: 2000
+//      onTriggered: starthit.play()
+//  }
 
 
 }

@@ -16,8 +16,9 @@ EntityBase {
     Image {
       id: whiteWallBody
       anchors.fill:parent
-      source:"../../images/whiteWall.png"
+      source:"../../assets/images/whiteWall.png"
     }
+
 
     BoxCollider {
       id: boxCollider

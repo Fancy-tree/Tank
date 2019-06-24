@@ -29,7 +29,7 @@ EntityBase {
     id: propSpeedUpImage
     width: parent.width
     height: parent.height
-    source: "../../../images/prop_speedUp.png"
+    source: "../../../assets/images/prop_speedUp.png"
     anchors.centerIn: parent
 
   }

@@ -22,7 +22,7 @@ EntityBase {
     Image {
       id: homeBody
       anchors.fill: parent
-      source: "../../images/home.png"
+      source: "../../assets/images/home.png"
     }
 
     BoxCollider {
@@ -33,7 +33,7 @@ EntityBase {
     function beShoted(){
         life--;
         if(life===0){
-            homeBody.source="../../images/homeBroke.png";
+            homeBody.source="../../assets/images/homeBroke.png";
             gameOverh=1;
             gameWindow.gameOver=1;//家毁游戏结束
             var toRemoveEntityTypes = ["singleBullet","p1","p2","enemy","propShield","propLifeAdd","propSpeedUp"];

@@ -12,19 +12,7 @@ Common.LevelBase {
     levelName: "Level1"
     property double cow: rectangle.height/14/2
     property double column: rectangle.height/14/2
-    //   RedWall{
-    //    entityId: "redWall1"
-    //    id: redWall1
-    //    height:cow
-    //    width:column
-    //    anchors {
-    //      top: scene.top
-    //      left: scene.left
-    //      topMargin:cow*15
-    //      //leftMargin: tree5.treeBody.width - 18
-    //    }
-    //    //redWallBody.source: "../../images/redWalls.png"
-    //   }
+
 
     WhiteWall{
         entityId: "redWall1"

@@ -11,7 +11,7 @@ EntityBase {
 
     x: originX
     y: originY
-    width: rectangle.width/13-2-5
+    width: rectangle.width/13-3-1
     height: width
 
     property alias tankBody: tankBody
